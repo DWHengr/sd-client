@@ -1,0 +1,45 @@
+port: :8080
+
+sd:
+  #云端服务地址
+  cloudHost: http://127.0.0.1:8181
+  #定时任务(单位秒)
+  job:
+    #本地监控ip变化定时任务
+    ipMonitor: 10
+    #本地服务与其他服务连通性定时任务
+    ipPing: 10
+    #同步云端定时任务
+    syncCloud: 10
+  #bind dns相关配置
+  bind:
+    #是否修改bind配置文件
+    enable: true
+    #zone文件的位置目录 (例:/var/named/)(默认生成的zone文件名为域名)
+    zonesDir: 
+    #生成zone文件的前缀
+    zoneFilePrefix: p_
+    #生成zone文件的后缀
+    zoneFileSuffix: _S
+    #重新加载bind的命令
+    reloadConfigCmd: rndc reload
+  #回调的主机地址
+  callHosts:
+    - http://127.0.0.1:8181/api/gg
+
+http:
+  #最大连接数
+  maxIdleConns: 20
+  #超时时间(s)
+  timeout: 10
+
+log:
+  level: -1
+  development: false
+  sampling:
+    initial: 100
+    thereafter: 100
+  outputPath:
+    - stderr
+  errorOutputPath:
+    - stderr

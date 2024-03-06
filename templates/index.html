@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务列表</title>
+    <style>
+        /* Styles for table */
+        body {
+            margin: 50px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Styles for modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 50%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .header-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            padding: 50px 50px 0 50px;
+            background: #fff;
+        }
+
+        .table-container {
+            overflow: auto;
+            margin-top: 160px;
+        }
+
+        /* Styles for form */
+        .table-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        button {
+            background-color: #008CBA;
+            height: 35px;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        button:hover {
+            background-color: #005f7f;
+        }
+
+        /* Custom styles for search */
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 200px;
+        }
+
+        .search-container input[type="submit"] {
+            width: 200px;
+            padding: 10px 15px;
+        }
+
+        /* 允许的小圆圈样式 */
+        .allowed-circle {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: green;
+            margin-right: 5px;
+        }
+
+        /* 禁止的小圆圈样式 */
+        .forbidden-circle {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: red;
+            margin-right: 5px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="header-container">
+    <div style="display: flex;align-items: center">
+        <div style="font-weight: 800;font-size: 40px">服务列表-本地</div>
+    </div>
+    <div class="search-container">
+        <form action="/" method="get">
+            <input type="text" name="name" placeholder="服务名">
+            <input type="text" name="mac" placeholder="Mac地址">
+            <input type="submit" value="搜索">
+        </form>
+    </div>
+</div>
+<div class="table-container">
+    <table>
+        <tr>
+            <th style="width: 15%;">ID</th>
+            <th style="width: 10%;">服务名</th>
+            <th style="width: 15%;">mac地址</th>
+            <th style="width: 25%;">域名</th>
+            <th style="width: 15%;">IP</th>
+            <th style="width: 10%;">是否连通</th>
+            <th>操作</th>
+        </tr>
+        {{range .items}}
+        <tr id="item_{{.Id}}"
+            data-id="{{.Id}}"
+            data-name="{{.Name}}"
+            data-mac="{{.Mac}}"
+            data-domain="{{.Domain}}"
+            data-ip="{{.Ip}}"
+        >
+            <td>{{.Id}}</td>
+            <td>{{.Name}}</td>
+            <td>{{.Mac}}</td>
+            <td>{{.Domain}}</td>
+            <td>{{.Ip}}</td>
+            <td>
+                {{if .IsPing}}
+                <div style="display:flex;align-items: center">
+                    <div class="allowed-circle"></div>
+                    <div>是</div>
+                </div>
+                {{else}}
+                <div style="display:flex;align-items: center">
+                    <div class="forbidden-circle"></div>
+                    <div>否</div>
+                </div>
+
+                {{end}}
+            </td>
+            <td>
+                <a href="#" onclick="showUpdateModal( {{.Id}})">修改</a>
+                {{if .IsManuallyModify}}
+                <a href="#" onclick="confirmDelete({{.Id}})">禁用手动</a>
+                {{end}}
+            </td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+
+<!-- Modal -->
+<div id="addModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close" onclick="hideAddModal()">&times;</span>
+        <h2>新增服务</h2>
+        <form id="itemForm" action="/add" method="post">
+            <input type="hidden" name="id" id="itemId">
+            <div style="margin-bottom: 20px">
+                服务名: <input type="text" name="Name" id="itemName"><br>
+            </div>
+            <div style="margin-bottom: 20px">
+                mac地址: <input type="text" name="Mac" id="itemMac"><br>
+            </div>
+            <div style="margin-bottom: 20px">
+                域名: <input type="text" name="Domain" id="itemDomain"><br>
+            </div>
+            <div style="margin-bottom: 20px">
+                IP: <input type="text" name="Ip" id="itemIp"><br>
+            </div>
+            <input type="submit" value="提交">
+        </form>
+    </div>
+</div>
+
+<div id="updateModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close" onclick="hideUpdateModal()">&times;</span>
+        <h2>修改服务</h2>
+        <form id="updateForm" action="/update" method="post">
+            <input type="hidden" name="Id" id="updateId">
+            <div style="margin-bottom: 20px">
+                服务名: <input type="text" name="Name" id="updateName"><br>
+            </div>
+            <div style="margin-bottom: 20px">
+                mac地址: <input type="text" name="Mac" id="updateMac"><br>
+            </div>
+            <div style="margin-bottom: 20px">
+                域名: <input type="text" name="Domain" id="updateDomain"><br>
+            </div>
+            <div style="margin-bottom: 20px">
+                IP: <input type="text" name="Ip" id="updateIp"><br>
+            </div>
+            <input type="submit" value="提交">
+        </form>
+    </div>
+</div>
+
+<script>
+    function showAddModal() {
+        document.getElementById("itemId").value = "";
+        document.getElementById("itemName").value = "";
+        document.getElementById("itemMac").value = "";
+        document.getElementById("itemDomain").value = "";
+        document.getElementById("itemIp").value = "";
+        document.getElementById("addModal").style.display = "block";
+    }
+
+    function hideAddModal() {
+        document.getElementById("addModal").style.display = "none";
+    }
+
+    function showUpdateModal(id) {
+        var item = document.getElementById("item_" + id);
+        document.getElementById("updateId").value = item.getAttribute("data-id");
+        document.getElementById("updateName").value = item.getAttribute("data-name");
+        document.getElementById("updateMac").value = item.getAttribute("data-mac");
+        document.getElementById("updateDomain").value = item.getAttribute("data-domain");
+        document.getElementById("updateIp").value = item.getAttribute("data-ip");
+        document.getElementById("updateModal").style.display = "block";
+    }
+
+    function hideUpdateModal() {
+        document.getElementById("updateModal").style.display = "none";
+    }
+
+    function confirmDelete(id) {
+        if (confirm("确定删除该服务手动修改配置?")) {
+            window.location.href = "/delete/manually/" + id;
+        }
+    }
+</script>
+</body>
+</html>

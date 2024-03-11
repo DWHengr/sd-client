@@ -29,12 +29,14 @@ func SendGratutiousArp() {
 		client, err := arp.Dial(&ifi)
 		if err != nil {
 			logger.Logger.Error(err)
+			return
 		}
 		// 发送ARP请求
 		addr, err := netip.ParseAddr("255.255.255.255")
 		err = client.Request(addr)
 		if err != nil {
 			logger.Logger.Error(err)
+			return
 		}
 		logger.Logger.Info(ifi.Name + ":ARP请求已发送")
 		client.Close()

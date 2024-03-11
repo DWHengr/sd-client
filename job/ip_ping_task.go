@@ -19,7 +19,10 @@ func IpPingTask() {
 		if err == nil && packetLoss < 50 {
 			itemList[i].IsPing = true
 		} else {
-			logger.Logger.Error("ping不通结果:", err, packetLoss)
+			if item.IsManuallyModify {
+				continue
+			}
+			logger.Logger.Error("ping不通结果:", item.Ip, err, packetLoss)
 			itemList[i].IsPing = false
 			//查询arp表
 			ip := arpTables[item.Mac]

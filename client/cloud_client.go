@@ -34,7 +34,7 @@ func ModifyCloudServiceIp(mac string, ip string) error {
 	}
 	var result httpclient.R
 	var err error
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 1; i++ {
 		err = httpclient.POST(nil, host+"/api/modify/service/ip", param, &result)
 		if err != nil {
 			continue

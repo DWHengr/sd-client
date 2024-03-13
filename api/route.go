@@ -52,7 +52,7 @@ func NewRouter(c *config.Config) (*Router, error) {
 func newRouter(c *config.Config) (*gin.Engine, error) {
 
 	engine := gin.New()
-	engine.Use(pkglogger.LoggerFunc())
+	engine.Use(pkglogger.GinLogger())
 
 	return engine, nil
 }

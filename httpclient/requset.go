@@ -41,6 +41,7 @@ func POST(ctx context.Context, uri string, params interface{}, entity interface{
 		fmt.Println("Request-Id:" + header.GetRequestId(ctx) + " http request uri:" + uri + "http request params:" + string(paramByte))
 		req.Header.Add(header.GetRequestIDKV(ctx).Wreck())
 	}
+	logger.Logger.Info("http post request uri:" + uri + " http request params:" + string(paramByte))
 
 	response, err := client.Do(req)
 	if err != nil {
@@ -57,6 +58,7 @@ func POST(ctx context.Context, uri string, params interface{}, entity interface{
 }
 
 func GET(uri string, entity interface{}) error {
+	logger.Logger.Info("http get request uri:" + uri)
 	client = GetHttpClient()
 	response, err := client.Get(uri)
 	if err != nil {

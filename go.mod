@@ -1,16 +1,15 @@
 module sd-client
 
-go 1.17
+go 1.19
 
 require (
 	github.com/gin-gonic/gin v1.8.1
-	github.com/go-logr/logr v1.2.3
 	github.com/go-ping/ping v1.1.0
-	github.com/google/gopacket v1.1.19
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/mdlayher/arp v0.0.0-20220512170110-6706a2966875
 	go.uber.org/zap v1.21.0
 	gopkg.in/yaml.v2 v2.4.0
+	gorm.io/gorm v1.25.7
 )
 
 require (

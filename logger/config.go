@@ -1,7 +1,7 @@
 package logger
 
 // Config config
-type LogConfig struct {
+type Config struct {
 	Level           int      `yaml:"level"`
 	Development     bool     `yaml:"development"`
 	Sampling        Sampling `yaml:"sampling"`

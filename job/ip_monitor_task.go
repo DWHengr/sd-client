@@ -4,6 +4,7 @@ import (
 	"net"
 	"sd-client/client"
 	pkglogger "sd-client/logger"
+	utils2 "sd-client/utils"
 )
 
 type MacInfo struct {
@@ -60,6 +61,7 @@ func IpMonitorTask() {
 		}
 	}
 	if isUpdate {
+		utils2.SendGratutiousArp()
 		go SyncCloudTask()
 	}
 

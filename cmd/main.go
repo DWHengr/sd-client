@@ -21,12 +21,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	logger.Logger = logger.New(&conf.Log)
+	err = logger.New(&conf.Log)
 	if err != nil {
 		panic(err)
 	}
 	utils2.SendGratutiousArp()
-	utils2.GetARPTables()
 	if err != nil {
 		panic(err)
 	}

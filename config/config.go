@@ -40,7 +40,7 @@ type Sd struct {
 // Config 配置文件
 type Config struct {
 	Port string                `yaml:"port"`
-	Log  logger.LogConfig      `yaml:"log"`
+	Log  logger.Config         `yaml:"log"`
 	Sd   Sd                    `yaml:"sd"`
 	Http httpclient.HttpConfig `yaml:"http"`
 }

@@ -30,6 +30,7 @@ func SyncCloudTask() {
 					Name:             cloudItem.Name,
 					Domain:           cloudItem.Domain,
 					Id:               cloudItem.Id,
+					Depid:            cloudItem.Depid,
 					IsPing:           cloudItem.IsPing,
 					IsManuallyModify: cloudItem.IsManuallyModify,
 				})
@@ -44,6 +45,7 @@ func SyncCloudTask() {
 				item.Mac = cloudItem.Mac
 				item.Domain = cloudItem.Domain
 				item.Name = cloudItem.Name
+				item.Depid = cloudItem.Depid
 			}
 		}
 	}

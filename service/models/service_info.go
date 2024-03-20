@@ -6,6 +6,7 @@ type ServiceInfo struct {
 	Mac              string `json:"mac"`
 	Domain           string `json:"domain"`
 	Ip               string `json:"ip"`
+	Depid            string `json:"depid"`
 	IsPing           bool   `json:"isPing"`
 	IsManuallyModify bool   `json:"isManuallyModify"`
 }
@@ -15,6 +16,7 @@ func (s ServiceInfo) CompareContentsEqual(o ServiceInfo) bool {
 		s.Name != o.Name ||
 		s.Mac != o.Mac ||
 		s.Domain != o.Domain ||
+		s.Depid != o.Depid ||
 		s.Ip != o.Ip {
 		return false
 	}

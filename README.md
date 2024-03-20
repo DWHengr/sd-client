@@ -30,13 +30,20 @@
       "isManuallyModify": false
     },
     {
+      //服务的ID
       "id": "05c088cd-3ee8-4c6e-8037-2409d41a6ae6",
+      //服务名称
       "name": "node4",
+      //服务的mac地址
       "mac": "52:54:11:6a:be:11",
+      //服务的域名
       "domain": "WWW.node4.COM",
+      //服务的IP
       "ip": "172.16.10.4",
-      "isPing": true,
-      "isManuallyModify": true
+      //本地和该服务是否连通
+      "isPing": false,
+      //该服务内容是否手改修改过
+      "isManuallyModify": false
     }
   ]
 }

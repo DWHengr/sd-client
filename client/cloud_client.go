@@ -4,6 +4,7 @@ import (
 	"errors"
 	"sd-client/config"
 	"sd-client/httpclient"
+	"sd-client/logger"
 	"sd-client/service/models"
 )
 
@@ -21,6 +22,7 @@ func GetCloudItemList() ([]*models.ServiceInfo, error) {
 	if result.Code == 0 {
 		return cloudItemList, nil
 	}
+	logger.Logger.Error("/api/list :", result.Msg)
 	return nil, errors.New(result.Msg)
 }
 
@@ -41,6 +43,7 @@ func ModifyCloudServiceIp(mac string, ip string) error {
 		}
 		if result.Code != 0 {
 			err = errors.New(result.Msg)
+			logger.Logger.Error("/api/modify/service/ip :", result.Msg)
 			continue
 		}
 		return nil

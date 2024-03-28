@@ -35,7 +35,7 @@ var routers = []func(engine *gin.Engine){
 
 func NewRouter(c *config.Config) (*Router, error) {
 	engine, err := newRouter(c)
-	engine.LoadHTMLGlob("templates/*")
+	engine.LoadHTMLGlob(c.WorkDir + "templates/*")
 	engine.Use(Cors())
 	if err != nil {
 		return nil, err

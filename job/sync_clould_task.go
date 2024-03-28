@@ -1,6 +1,7 @@
 package job
 
 import (
+	"os"
 	"sd-client/api"
 	"sd-client/client"
 	"sd-client/service/models"
@@ -14,12 +15,19 @@ func SyncCloudTask() {
 	for _, item := range itemList {
 		itemMap[item.Mac] = item
 	}
+	//当前主机名
+	hostname, _ := os.Hostname()
 	//是否有内容变化
 	isUpdate := false
 	for _, cloudItem := range cloudItemList {
 		item := itemMap[cloudItem.Mac]
+		isSelf := false
+		if hostname == cloudItem.Name {
+			isSelf = true
+		}
 		//手动修改优先级高于云端同步
 		if item != nil && item.IsManuallyModify {
+			item.IsSelf = isSelf
 			continue
 		} else {
 			if item == nil {
@@ -31,6 +39,7 @@ func SyncCloudTask() {
 					Domain:           cloudItem.Domain,
 					Id:               cloudItem.Id,
 					Depid:            cloudItem.Depid,
+					IsSelf:           isSelf,
 					IsPing:           cloudItem.IsPing,
 					IsManuallyModify: cloudItem.IsManuallyModify,
 				})
@@ -46,6 +55,7 @@ func SyncCloudTask() {
 				item.Domain = cloudItem.Domain
 				item.Name = cloudItem.Name
 				item.Depid = cloudItem.Depid
+				item.IsSelf = isSelf
 			}
 		}
 	}

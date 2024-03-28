@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"sd-client/httpclient/header"
+	"sd-client/jwt"
 	"sd-client/logger"
 )
 
@@ -42,7 +43,9 @@ func POST(ctx context.Context, uri string, params interface{}, entity interface{
 		req.Header.Add(header.GetRequestIDKV(ctx).Wreck())
 	}
 	logger.Logger.Info("http post request uri:" + uri + " http request params:" + string(paramByte))
-
+	//添加token
+	token, _ := jwt.GenerateJWTToken("sd-client")
+	req.Header.Set("token", token)
 	response, err := client.Do(req)
 	if err != nil {
 		logger.Logger.Errorw(err.Error())
@@ -60,7 +63,12 @@ func POST(ctx context.Context, uri string, params interface{}, entity interface{
 func GET(uri string, entity interface{}) error {
 	logger.Logger.Info("http get request uri:" + uri)
 	client = GetHttpClient()
-	response, err := client.Get(uri)
+	req, err := http.NewRequest("GET", uri, nil)
+	//添加token
+	token, _ := jwt.GenerateJWTToken("sd-client")
+	req.Header.Set("token", token)
+	response, err := client.Do(req)
+	response.Header.Set("", "")
 	if err != nil {
 		logger.Logger.Errorw(err.Error())
 		return err

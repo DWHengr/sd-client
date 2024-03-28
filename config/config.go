@@ -39,10 +39,11 @@ type Sd struct {
 
 // Config 配置文件
 type Config struct {
-	Port string                `yaml:"port"`
-	Log  logger.Config         `yaml:"log"`
-	Sd   Sd                    `yaml:"sd"`
-	Http httpclient.HttpConfig `yaml:"http"`
+	Port    string                `yaml:"port"`
+	WorkDir string                `yaml:"work-dir"`
+	Log     logger.Config         `yaml:"log"`
+	Sd      Sd                    `yaml:"sd"`
+	Http    httpclient.HttpConfig `yaml:"http"`
 }
 
 // GetAllConfig Get all configurations

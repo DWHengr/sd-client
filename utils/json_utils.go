@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sd-client/config"
 	"sd-client/service/models"
 )
 
@@ -16,12 +17,13 @@ var JsonFileName = "data.json"
 
 // 读取 JSON 文件
 func LoadJSONFile() ([]*models.ServiceInfo, error) {
+	allConfig, _ := config.GetAllConfig()
 	// 尝试打开文件
-	file, err := os.Open(JsonFileName)
+	file, err := os.Open(allConfig.WorkDir + JsonFileName)
 	// 如果文件不存在则创建新文件
 	if os.IsNotExist(err) {
 		fmt.Println("JSON file not found. Creating a new one.")
-		newFile, err := os.Create(JsonFileName)
+		newFile, err := os.Create(allConfig.WorkDir + JsonFileName)
 		if err != nil {
 			return nil, err
 		}
@@ -63,6 +65,7 @@ func LoadJSONFile() ([]*models.ServiceInfo, error) {
 
 // 写入 JSON 文件
 func WriteJSONFile(data []*models.ServiceInfo) error {
+	allConfig, _ := config.GetAllConfig()
 	newData := ServiceList{
 		Services: data,
 	}
@@ -71,7 +74,7 @@ func WriteJSONFile(data []*models.ServiceInfo) error {
 		return err
 	}
 	// 将数据写入文件
-	err = ioutil.WriteFile(JsonFileName, jsonData, 0644)
+	err = ioutil.WriteFile(allConfig.WorkDir+JsonFileName, jsonData, 0644)
 	if err != nil {
 		fmt.Println(err)
 		return err

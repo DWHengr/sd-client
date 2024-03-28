@@ -7,6 +7,7 @@ type ServiceInfo struct {
 	Domain           string `json:"domain"`
 	Ip               string `json:"ip"`
 	Depid            string `json:"depid"`
+	IsSelf           bool   `json:"isSelf"`
 	IsPing           bool   `json:"isPing"`
 	IsManuallyModify bool   `json:"isManuallyModify"`
 }

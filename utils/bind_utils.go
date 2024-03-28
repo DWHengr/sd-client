@@ -16,7 +16,7 @@ func WriteBindZoneFile(item *models.ServiceInfo) {
 		return
 	}
 	// 从文件中读取模板内容
-	tplBytes, err := os.ReadFile("bind_zone_tpl.txt")
+	tplBytes, err := os.ReadFile(allConfig.WorkDir + "bind_zone_tpl.txt")
 	if err != nil {
 		logger.Logger.Error("bind_zone_tpl file err: ", err)
 		return

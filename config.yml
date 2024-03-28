@@ -3,7 +3,7 @@ port: :8282
 
 sd:
   #云端服务（sd-cloud）地址
-  cloudHost: http://172.16.10.2:8181
+  cloudHost: http://127.0.0.1:8181
   #定时任务(单位秒)
   job:
     #本地监控ip变化的定时任务
@@ -44,7 +44,7 @@ log:
     thereafter: 100
   #日志输出位置（默认为输出到当前目录下log.log文件中）
   outputPath:
-    - log.log
+    - stderr
   #错误日志输出位置（默认为输出到当前目录下log.log文件中）
   errorOutputPath:
-    - log.log
+    - stderr

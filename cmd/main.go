@@ -13,11 +13,14 @@ import (
 	"syscall"
 )
 
+var dirPath = flag.String("dir", "./", "-dir project path")
 var configPath = flag.String("config", "config.yml", "-config Configuration File Address")
 
 func main() {
+
 	flag.Parse()
-	conf, err := config.NewConfig(*configPath)
+	conf, err := config.NewConfig(*dirPath + *configPath)
+	conf.WorkDir = *dirPath
 	if err != nil {
 		panic(err)
 	}

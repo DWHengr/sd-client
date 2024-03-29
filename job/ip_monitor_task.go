@@ -2,6 +2,7 @@ package job
 
 import (
 	"net"
+	"sd-client/api"
 	"sd-client/client"
 	pkglogger "sd-client/logger"
 	utils2 "sd-client/utils"
@@ -15,6 +16,11 @@ type MacInfo struct {
 var macInfosMap = make(map[string]string)
 
 func IpMonitorTask() {
+	var itemCloudIdMap = make(map[string]bool)
+	itemList := api.GetItemList()
+	for _, item := range itemList {
+		itemCloudIdMap[item.Mac] = true
+	}
 	// 获取本地网络接口信息
 	iFaces, err := net.Interfaces()
 	if err != nil {
@@ -50,9 +56,7 @@ func IpMonitorTask() {
 		}
 		macStr := mac.String()
 		//mac地址对应的ip信息变化更新本地和远程
-		oldIp := macInfosMap[mac.String()]
-		if ip != oldIp {
-			// 调用云端api更新信息
+		if itemCloudIdMap[mac.String()] {
 			err := client.ModifyCloudServiceIp(mac.String(), ip)
 			if err == nil {
 				macInfosMap[macStr] = ip

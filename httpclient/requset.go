@@ -68,7 +68,6 @@ func GET(uri string, entity interface{}) error {
 	token, _ := jwt.GenerateJWTToken("sd-client")
 	req.Header.Set("token", token)
 	response, err := client.Do(req)
-	response.Header.Set("", "")
 	if err != nil {
 		logger.Logger.Errorw(err.Error())
 		return err

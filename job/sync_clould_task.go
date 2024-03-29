@@ -11,16 +11,34 @@ import (
 func SyncCloudTask() {
 	cloudItemList, _ := client.GetCloudItemList()
 	var itemMap = make(map[string]*models.ServiceInfo)
+	var itemCloudIdMap = make(map[string]bool)
+	//获取云端服务对应的id
+	for _, item := range cloudItemList {
+		itemCloudIdMap[item.Id] = true
+	}
+	//是否有内容变化
+	isUpdate := false
+
+	var newItemList []*models.ServiceInfo
 	itemList := api.GetItemList()
+	//没删除的，才做修改，移除删除的内容
 	for _, item := range itemList {
-		itemMap[item.Mac] = item
+		//手动修改的不删除
+		if itemCloudIdMap[item.Id] || item.IsManuallyModify {
+			itemMap[item.Id] = item
+			newItemList = append(newItemList, item)
+		} else {
+			isUpdate = true
+		}
+	}
+	if isUpdate {
+		itemList = newItemList
+		api.SetItemList(newItemList)
 	}
 	//当前主机名
 	hostname, _ := os.Hostname()
-	//是否有内容变化
-	isUpdate := false
 	for _, cloudItem := range cloudItemList {
-		item := itemMap[cloudItem.Mac]
+		item := itemMap[cloudItem.Id]
 		isSelf := false
 		if hostname == cloudItem.Name {
 			isSelf = true

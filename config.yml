@@ -26,7 +26,7 @@ sd:
     reloadConfigCmd: rndc reload
   #回调的主机地址（调用三方的地址，方式为post，参数为服务列表）
   callHosts:
-    - http://127.0.0.1:8181/api/gg
+    #- http://127.0.0.1:8181/api/gg
 
 #http相关配置
 http:
@@ -44,7 +44,7 @@ log:
     thereafter: 100
   #日志输出位置（默认为输出到当前目录下log.log文件中）
   outputPath:
-    - stderr
+    - log.log
   #错误日志输出位置（默认为输出到当前目录下log.log文件中）
   errorOutputPath:
-    - stderr
+    - log.log

@@ -9,7 +9,10 @@ import (
 )
 
 func SyncCloudTask() {
-	cloudItemList, _ := client.GetCloudItemList()
+	cloudItemList, err := client.GetCloudItemList()
+	if err != nil {
+		return
+	}
 	var itemMap = make(map[string]*models.ServiceInfo)
 	var itemCloudIdMap = make(map[string]bool)
 	//获取云端服务对应的id
@@ -43,9 +46,13 @@ func SyncCloudTask() {
 		if hostname == cloudItem.Name {
 			isSelf = true
 		}
+		cloudItem.IsSelf = isSelf
 		//手动修改优先级高于云端同步
 		if item != nil && item.IsManuallyModify {
-			item.IsSelf = isSelf
+			if item.IsSelf != isSelf {
+				item.IsSelf = isSelf
+				isUpdate = true
+			}
 			continue
 		} else {
 			if item == nil {
@@ -73,7 +80,7 @@ func SyncCloudTask() {
 				item.Domain = cloudItem.Domain
 				item.Name = cloudItem.Name
 				item.Depid = cloudItem.Depid
-				item.IsSelf = isSelf
+				item.IsSelf = cloudItem.IsSelf
 			}
 		}
 	}

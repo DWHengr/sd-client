@@ -18,7 +18,8 @@ func (s ServiceInfo) CompareContentsEqual(o ServiceInfo) bool {
 		s.Mac != o.Mac ||
 		s.Domain != o.Domain ||
 		s.Depid != o.Depid ||
-		s.Ip != o.Ip {
+		s.Ip != o.Ip ||
+		s.IsSelf != o.IsSelf {
 		return false
 	}
 	return true

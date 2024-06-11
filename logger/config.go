@@ -7,6 +7,7 @@ type Config struct {
 	Sampling        Sampling `yaml:"sampling"`
 	OutputPath      []string `yaml:"outputPath"`
 	ErrorOutputPath []string `yaml:"errorOutputPath"`
+	Cron            string   `yaml:"cron"`
 }
 
 // Sampling Sampling
